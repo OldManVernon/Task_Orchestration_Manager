@@ -4,16 +4,16 @@ import java.util.ArrayList;
 public class Task 
 {
 private String name;
-private ArrayList<String> Supplies;
+private ArrayList<String> Supplies = new ArrayList<String>();
 private int Category;
 private GregorianCalendar deadline;
 private int id;
 private int completion;
-private ArrayList<Event> history;
-private ArrayList<GregorianCalendar> Blackout;
+private ArrayList<Event> history = new ArrayList<Event>();
+private ArrayList<GregorianCalendar> Blackout = new ArrayList<GregorianCalendar>();
 private int priority;
 //private int priority_growth; //impliment adjustment of priority in accordance to duedate proximity
-private ArrayList<Task> subtasks;
+private ArrayList<Task> subtasks = new ArrayList<Task>();
 private GregorianCalendar timer;
 
 //constructor for Task, give task a name and an ID
