@@ -10,47 +10,36 @@ public class TemporalManager
 //returns the number of days between end and start dates
 	public int Daysdifference(GregorianCalendar start, GregorianCalendar end)
 	{
-		int year = end.get(GregorianCalendar.YEAR) - start.get(GregorianCalendar.YEAR); 
-		//difference in years between dates, this should never be negative, if it is there is an error
-		int month = end.get(GregorianCalendar.MONTH) - start.get(GregorianCalendar.MONTH);
-		if (month < 0)
-		{
-			year = year -1; 
-			month = month + 12;
-			//i.e. November 1 2016 start to January 1 2017 end would have year = 1, month = (0-10) = -10, 
-			//adjust by adding 12 to see 2 months (November, December) difference between the two dates
-		}
-		int day = end.get(GregorianCalendar.DAY_OF_MONTH) - start.get(GregorianCalendar.DAY_OF_MONTH);
-		if(day == 0 && month > 0) //if there is some difference between them
-		{
-			GregorianCalendar stepper = start;
-			for (int i = stepper.get(GregorianCalendar.MONTH); i < stepper.get(GregorianCalendar.MONTH) + month; i++)
-			{
-				day += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-				GregorianCalendar temp_cal = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR), i, stepper.get(GregorianCalendar.DAY_OF_MONTH), stepper.get(GregorianCalendar.HOUR_OF_DAY), stepper.get(GregorianCalendar.MINUTE));
-				stepper = temp_cal;
-			}
-			month = 0; //we have now accounted for the # days between the two dates
-		}
-		else if (day < 0)
-		{
-			day = start.getActualMaximum(GregorianCalendar.DAY_OF_MONTH) - start.get(GregorianCalendar.DAY_OF_MONTH);
-			day += end.get(GregorianCalendar.DAY_OF_MONTH);
-			month --;
-		}
+	int day = end.get(GregorianCalendar.DAY_OF_MONTH) - start.get(GregorianCalendar.DAY_OF_MONTH);
+	//the difference in day of the month can easily be negative, iff the start and end are in different months or years
 		
-		if (month > 0){
-			GregorianCalendar stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR), start.get(GregorianCalendar.MONTH) + 1, start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
-			int roof = stepper.get(GregorianCalendar.MONTH) + month;
-			for (int i = stepper.get(GregorianCalendar.MONTH); i < roof; i++)
-			{
-				day += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-				GregorianCalendar temp_cal = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR), i, stepper.get(GregorianCalendar.DAY_OF_MONTH), stepper.get(GregorianCalendar.HOUR_OF_DAY), stepper.get(GregorianCalendar.MINUTE));
-				stepper = temp_cal;
-			}
-			month = 0; //we have now accounted for the # days between the two dates
+	if (end.get(GregorianCalendar.YEAR) != start.get(GregorianCalendar.YEAR) || end.get(GregorianCalendar.MONTH) != start.get(GregorianCalendar.MONTH)){
+		int accumulator = 0; //keeps track of the number of days between start and finish
+		
+		GregorianCalendar stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR), start.get(GregorianCalendar.MONTH), start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
+		accumulator += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH) - stepper.get(GregorianCalendar.DAY_OF_MONTH); //number of days remaining in that month
+		//finish up the month that the start date is in the middle of, the fact that dates index @ 0 means the difference is already accurate
+		
+		//step forward one month, which sometimes means January of the next year
+		if (stepper.get(GregorianCalendar.MONTH) == 11){
+			stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR)+1, start.get(GregorianCalendar.MONTH), start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));}
+		else{
+			stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR), start.get(GregorianCalendar.MONTH)+1, start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));}
+		
+		//while we haven't reached the end month
+			while ( stepper.get(GregorianCalendar.YEAR) < end.get(GregorianCalendar.YEAR) || (stepper.get(GregorianCalendar.MONTH) < end.get(GregorianCalendar.MONTH))){
+				//System.out.println(stepper.get(GregorianCalendar.MONTH));
+				accumulator += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); //every day that occured in the month gets added. GregorianCalendar accounts for leap years and w/e
+				//step forward one month, which sometimes means January of the next year
+				if (stepper.get(GregorianCalendar.MONTH) == 11)
+					stepper = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR)+1, 0, stepper.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
+				else 
+					stepper = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR), stepper.get(GregorianCalendar.MONTH) + 1, stepper.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
+			} //exits with stepper in the same month same year as the end date
+			accumulator += end.get(GregorianCalendar.DAY_OF_MONTH) + 1; //add an extra one to compensate for the indexing @ 0
+			day = accumulator; //our previous day count was wrong, possibly even < 0
 		}
-		return day;
+	return day;
 	}
 	
 //returns true if the current date and time is between two other days & times
