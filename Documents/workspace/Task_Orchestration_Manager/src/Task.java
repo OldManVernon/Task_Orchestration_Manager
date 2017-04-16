@@ -57,6 +57,7 @@ private GregorianCalendar timer;
 //toString method for a Task outputs the details for the Task in a csv format
 //nested lists, I.E. Supplies, history, and Blackout times have a ' preceeding each element with a , at the end of the sublist
 	public String toString(){
+		TemporalManager time = new TemporalManager();
 		String temp = "";
 /*INDX 1 = NAME*/
 		temp = temp + name + ","; 
@@ -80,12 +81,28 @@ private GregorianCalendar timer;
 			temp = temp + "'" + sub.getName() + sub.getID();
 		}
 		temp = temp + ",";
-		//private GregorianCalendar timer;
-		//private ArrayList<Event> history;
-		//TODO Events need their own toString as well
-		//private ArrayList<GregorianCalendar> Blackout;
-		//GregorianCalendar deadline
-		//TODO write an interface that converts GregorianCalendar into a Comprehensible String
+/*INDX 8 = DEADLINE*/
+		temp = temp + time.DateToString(deadline) + ",";
+/*INDX 9 = TIMER*/
+		temp = temp + time.DateToString(timer);
+/*INDX 10 = BLACKOUT*/ //form of 'start-end'start-end'....,
+		int start_indx = 0;
+		for (GregorianCalendar Date : Blackout)
+		{
+			if (start_indx == 0){
+				temp = temp + "'" + time.DateToString(Date);
+				start_indx = 1;}
+			else{
+				temp = temp + "-" + time.DateToString(Date);
+				start_indx = 0;
+			}
+		}
+		temp = temp + ",";
+/*INDX 11 = HISTORY*/ //form of 'date-commentString'date-commentString'....
+		for (Event instantance : history){
+			temp = temp + "'" + instantance.toString();
+		}
+
 		//will be useful for the Timer and Blackout fields as well
 		return temp;
 	}
