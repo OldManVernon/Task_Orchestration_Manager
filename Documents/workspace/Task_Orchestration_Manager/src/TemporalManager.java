@@ -6,13 +6,12 @@ public class TemporalManager
 	{
 		
 	}
-//returns year, month, dayOfMonth, hourOfDay, minute
 	
 //returns the number of days between end and start dates
 	public int Daysdifference(GregorianCalendar start, GregorianCalendar end)
 	{
-		String temp = "";
-		int year = end.get(GregorianCalendar.YEAR) - start.get(GregorianCalendar.YEAR); //this should never be negative, if it is there is an error
+		int year = end.get(GregorianCalendar.YEAR) - start.get(GregorianCalendar.YEAR); 
+		//difference in years between dates, this should never be negative, if it is there is an error
 		int month = end.get(GregorianCalendar.MONTH) - start.get(GregorianCalendar.MONTH);
 		if (month < 0)
 		{
@@ -42,7 +41,8 @@ public class TemporalManager
 		
 		if (month > 0){
 			GregorianCalendar stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR), start.get(GregorianCalendar.MONTH) + 1, start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
-			for (int i = stepper.get(GregorianCalendar.MONTH); i < stepper.get(GregorianCalendar.MONTH) + month; i++)
+			int roof = stepper.get(GregorianCalendar.MONTH) + month;
+			for (int i = stepper.get(GregorianCalendar.MONTH); i < roof; i++)
 			{
 				day += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 				GregorianCalendar temp_cal = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR), i, stepper.get(GregorianCalendar.DAY_OF_MONTH), stepper.get(GregorianCalendar.HOUR_OF_DAY), stepper.get(GregorianCalendar.MINUTE));
@@ -51,6 +51,16 @@ public class TemporalManager
 			month = 0; //we have now accounted for the # days between the two dates
 		}
 		return day;
-
+	}
+	
+//returns true if the current date and time is between two other days & times
+	public boolean inBlackout(GregorianCalendar end, GregorianCalendar start)
+	{
+		GregorianCalendar now = new GregorianCalendar();
+		if (now.after(start) && now.before(end))
+		{
+			return true;
+		}
+		return false;
 	}
 }
