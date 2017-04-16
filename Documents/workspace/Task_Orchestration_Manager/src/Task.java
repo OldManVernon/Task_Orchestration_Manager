@@ -63,7 +63,7 @@ private GregorianCalendar timer;
 		temp = temp + name + ","; 
 /*INDX 2 = ID*/		
 		temp = temp + id + ",";
-/*INDX 3 = SUPPLIES*/
+/*INDX 3 = SUPPLIES*/ //form of 'Supply1'Supply2...,
 		for (String supply : Supplies)
 		{
 			temp = temp + "'" + supply;
@@ -75,7 +75,7 @@ private GregorianCalendar timer;
 		temp = temp + completion + ",";
 /*INDX 6 = PRIORITY*/
 		temp = temp +  priority + ",";
-/*INDX 7 = SUBTASKS*/
+/*INDX 7 = SUBTASKS*///form of 'Task1'Task2...,
 		for (Task sub : subtasks)
 		{
 			temp = temp + "'" + sub.getName() + sub.getID();
