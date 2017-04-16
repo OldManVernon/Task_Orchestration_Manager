@@ -18,7 +18,7 @@ public class TemporalManager
 		
 		GregorianCalendar stepper = new GregorianCalendar(start.get(GregorianCalendar.YEAR), start.get(GregorianCalendar.MONTH), start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
 		accumulator += stepper.getActualMaximum(GregorianCalendar.DAY_OF_MONTH) - stepper.get(GregorianCalendar.DAY_OF_MONTH); //number of days remaining in that month
-		//finish up the month that the start date is in the middle of, the fact that dates index @ 0 means the difference is already accurate
+		//finish up the month that the start date is in the middle of, 
 		
 		//step forward one month, which sometimes means January of the next year
 		if (stepper.get(GregorianCalendar.MONTH) == 11){
@@ -36,7 +36,7 @@ public class TemporalManager
 				else 
 					stepper = new GregorianCalendar(stepper.get(GregorianCalendar.YEAR), stepper.get(GregorianCalendar.MONTH) + 1, stepper.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE));
 			} //exits with stepper in the same month same year as the end date
-			accumulator += end.get(GregorianCalendar.DAY_OF_MONTH) + 1; //add an extra one to compensate for the indexing @ 0
+			accumulator += end.get(GregorianCalendar.DAY_OF_MONTH); //day_of_month doesn't actually index @ 0 like I thought so this is fine
 			day = accumulator; //our previous day count was wrong, possibly even < 0
 		}
 	return day;
@@ -52,4 +52,13 @@ public class TemporalManager
 		}
 		return false;
 	}
+
+//returns a date in a format YYYY:MM:DD:HH:MM
+	public String DateToString(GregorianCalendar Date){
+		String temp = "";
+		temp = Date.get(GregorianCalendar.YEAR) + ":" + (Date.get(GregorianCalendar.MONTH) + 1) + ":" +
+				(Date.get(GregorianCalendar.DAY_OF_MONTH) + 1) + ":" + Date.get(GregorianCalendar.MINUTE);
+		return temp;
+	}
+	
 }
