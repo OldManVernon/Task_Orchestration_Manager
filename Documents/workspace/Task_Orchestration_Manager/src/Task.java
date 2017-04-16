@@ -70,14 +70,8 @@ private GregorianCalendar timer;
 		temp = temp + ",";
 /*INDX 4 = CATEGORY*/
 		temp = temp + Category + ",";
-		//GregorianCalendar deadline
-		//TODO write an interface that converts GregorianCalendar into a Comprehensible String
-		//will be useful for the Timer and Blackout fields as well
 /*INDX 5 = COMPLETION*/
 		temp = temp + completion + ",";
-		//private ArrayList<Event> history;
-		//TODO Events need their own toString as well
-		//private ArrayList<GregorianCalendar> Blackout;
 /*INDX 6 = PRIORITY*/
 		temp = temp +  priority + ",";
 /*INDX 7 = SUBTASKS*/
@@ -85,8 +79,14 @@ private GregorianCalendar timer;
 		{
 			temp = temp + "'" + sub.getName() + sub.getID();
 		}
+		temp = temp + ",";
 		//private GregorianCalendar timer;
-		
+		//private ArrayList<Event> history;
+		//TODO Events need their own toString as well
+		//private ArrayList<GregorianCalendar> Blackout;
+		//GregorianCalendar deadline
+		//TODO write an interface that converts GregorianCalendar into a Comprehensible String
+		//will be useful for the Timer and Blackout fields as well
 		return temp;
 	}
 }
