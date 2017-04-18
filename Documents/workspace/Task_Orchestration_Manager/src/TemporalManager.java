@@ -2,6 +2,11 @@ import java.util.GregorianCalendar;
 
 public class TemporalManager 
 {
+	private final int YEAR = 0;
+	private final int MONTH = 1;
+	private final int DAY = 2;
+	private final int HOUR = 3;
+	private final int MINUTE = 4;
 	public TemporalManager()
 	{
 		
@@ -56,8 +61,16 @@ public class TemporalManager
 //returns a date in a format YYYY:MM:DD:HH:MM
 	public String DateToString(GregorianCalendar Date){
 		String temp = "";
-		temp = Date.get(GregorianCalendar.YEAR) + ":" + (Date.get(GregorianCalendar.MONTH) + 1) + ":" +
-				(Date.get(GregorianCalendar.DAY_OF_MONTH) + 1) + ":" + Date.get(GregorianCalendar.MINUTE);
+		temp = Date.get(GregorianCalendar.YEAR) + ":" + Date.get(GregorianCalendar.MONTH) + ":" +
+				Date.get(GregorianCalendar.DAY_OF_MONTH) + ":" + Date.get(GregorianCalendar.HOUR) + ":"+ Date.get(GregorianCalendar.MINUTE);
+		return temp;
+	}
+	//start.get(GregorianCalendar.YEAR)+1, start.get(GregorianCalendar.MONTH), start.get(GregorianCalendar.DAY_OF_MONTH), start.get(GregorianCalendar.HOUR_OF_DAY), start.get(GregorianCalendar.MINUTE)
+//takes in the format YYYY:MM:DD:HH:MM and returns a GregorianCalendar object
+	public GregorianCalendar StringToDate(String Date){
+		String [] DateFields = Date.split(":");
+		GregorianCalendar temp = new GregorianCalendar(Integer.parseInt(DateFields[YEAR]), Integer.parseInt(DateFields[MONTH]), Integer.parseInt(DateFields[DAY]),
+				Integer.parseInt(DateFields[HOUR]), Integer.parseInt(DateFields[MINUTE]));
 		return temp;
 	}
 	

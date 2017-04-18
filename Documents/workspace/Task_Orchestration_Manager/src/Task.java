@@ -42,11 +42,11 @@ private GregorianCalendar timer;
 		return Supplies;}
 	public int setCategory(int category_ID) { Category = category_ID; return Category;}
 	public GregorianCalendar setDeadline(int year, int month, int dayOfMonth, int hourOfDay, int minute) { 
-		deadline = new GregorianCalendar(1900+ year, month, dayOfMonth, hourOfDay, minute);
+		deadline = new GregorianCalendar(year, month, dayOfMonth, hourOfDay, minute);
 		return deadline;}
 	public int setcompletion(int newCompletion) { completion = newCompletion; return completion;}
 	public ArrayList<Event> addHistory(Event Day) { history.add(Day); return history;}
-	public ArrayList<GregorianCalendar> setBlackouts(GregorianCalendar Start, GregorianCalendar End) { 
+	public ArrayList<GregorianCalendar> addBlackouts(GregorianCalendar Start, GregorianCalendar End) { 
 		Blackout.add(Start);
 		Blackout.add(End); 
 		return Blackout; }
@@ -75,16 +75,16 @@ private GregorianCalendar timer;
 		temp = temp + completion + ",";
 /*INDX 6 = PRIORITY*/
 		temp = temp +  priority + ",";
-/*INDX 7 = SUBTASKS*///form of 'Task1'Task2...,
+/*INDX 7 = SUBTASKS*///form of 'Task1Name:Task1ID'Task2:Task2ID...,
 		for (Task sub : subtasks)
 		{
-			temp = temp + "'" + sub.getName() + sub.getID();
+			temp = temp + "'" + sub.getName() + ":" + sub.getID();
 		}
 		temp = temp + ",";
 /*INDX 8 = DEADLINE*/
 		temp = temp + time.DateToString(deadline) + ",";
 /*INDX 9 = TIMER*/
-		temp = temp + time.DateToString(timer);
+		temp = temp + time.DateToString(timer) + ",";
 /*INDX 10 = BLACKOUT*/ //form of 'start-end'start-end'....,
 		int start_indx = 0;
 		for (GregorianCalendar Date : Blackout)

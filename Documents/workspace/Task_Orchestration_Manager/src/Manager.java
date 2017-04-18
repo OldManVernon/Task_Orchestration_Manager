@@ -41,7 +41,7 @@ private final int MINUTE = 4;
 		//File fileloc = new File("/Users/mortum987789/Desktop//HourlyDemands_2002-2014.csv");
 		BufferedReader br = null;
 		File fileloc = new File(Filelocation);
-		
+		ArrayList<Task> readTasks = new ArrayList<Task>();
 		//attempt to open the file
 		try {
 			br = new BufferedReader(new FileReader(fileloc));} 
@@ -53,25 +53,59 @@ private final int MINUTE = 4;
 		//Here is where our process really begins
 	    try {
 	        StringBuilder sb = new StringBuilder();
-	        String line = br.readLine();    
+	        String line = br.readLine();  
+	        TemporalManager thyme = new TemporalManager();
 	    	while (line != null)
 	    	{
 	    		String [] temp = line.split(",");
-	    		//for(String indx : temp)
-	    		//	System.out.println(indx);
+	    		System.out.println("Below is what the line was read in as and split into on the \",\"");
+	    		for(String indx : temp)
+	    			System.out.println(indx);
 	    		Task tempTask = new Task(temp[NAME], Integer.parseInt(temp[ID]));
 	    		String [] temporaryer = temp[SUPPLIES].split("'");
-	    		for (String supply : temporaryer)
-	    			tempTask.addSupply(supply);
+	    		for (int indx = 1; indx < temporaryer.length; indx ++)
+	    			tempTask.addSupply(temporaryer[indx]);
 	    		tempTask.setCategory(Integer.parseInt(temp[CATEGORY]));
 	    		tempTask.setcompletion(Integer.parseInt(temp[COMPLETION]));
 	    		tempTask.setPriority(Integer.parseInt(temp[PRIORITY]));
 	    		temporaryer = temp[SUBTASKS].split("'");
-	    		for (String sub : temporaryer){
-	    			String [] subTask = sub.split(":");
+	    		System.out.println("Below is what the subtasks was read in as and split into on the \'");
+	    		for(String indx : temporaryer)
+	    			System.out.println(indx);
+	    		for (int indx = 1; indx < temporaryer.length; indx ++){
+	    			String [] subTask = temporaryer[indx].split(":");
 	    			tempTask.addSubtasks(new Task(subTask[NAME], Integer.parseInt(subTask[ID])));
 	    		}
-	    		
+	    		temporaryer = temp[DEADLINE].split(":");
+	    		tempTask.setDeadline(Integer.parseInt(temporaryer[YEAR]), Integer.parseInt(temporaryer[MONTH]), 
+	    				Integer.parseInt(temporaryer[DAY]), Integer.parseInt(temporaryer[HOUR]), Integer.parseInt(temporaryer[MINUTE]));
+	    		temporaryer = temp[TIMER].split(":");
+	    		GregorianCalendar renew = new GregorianCalendar(Integer.parseInt(temporaryer[YEAR]), Integer.parseInt(temporaryer[MONTH]), 
+	    				Integer.parseInt(temporaryer[DAY]), Integer.parseInt(temporaryer[HOUR]), Integer.parseInt(temporaryer[MINUTE]));
+	    		tempTask.setTimer(renew);
+	    		temporaryer = temp[BLACKOUT].split("'");
+	    		String [] blackoutHelper = {""};
+	    		String [] dateSplitter = {""};
+	    		for (int indx = 1; indx < temporaryer.length; indx++)
+	    		{
+	    			blackoutHelper = temporaryer[indx].split("-");
+	    			dateSplitter = blackoutHelper[0].split(":");
+	    			GregorianCalendar start = new GregorianCalendar(Integer.parseInt(dateSplitter[YEAR]), Integer.parseInt(dateSplitter[MONTH]), 
+		    				Integer.parseInt(dateSplitter[DAY]), Integer.parseInt(dateSplitter[HOUR]), Integer.parseInt(dateSplitter[MINUTE]));
+	    			dateSplitter = blackoutHelper[1].split(":");
+	    			GregorianCalendar end = new GregorianCalendar(Integer.parseInt(dateSplitter[YEAR]), Integer.parseInt(dateSplitter[MONTH]), 
+		    				Integer.parseInt(dateSplitter[DAY]), Integer.parseInt(dateSplitter[HOUR]), Integer.parseInt(dateSplitter[MINUTE]));
+	    			tempTask.addBlackouts(start, end);
+	    		}
+	    		temporaryer = temp[EVENTS].split("'");
+	    		String [] eventSplitter = {""};
+	    		for (int indx = 1; indx < temporaryer.length; indx++)
+	    		{
+	    			eventSplitter = temporaryer[indx].split("-");
+	    			Event tempEv = new Event(eventSplitter[0], eventSplitter[1]);
+	    			tempTask.addHistory(tempEv);
+	    		}
+	    		readTasks.add(tempTask);
 	    		line = br.readLine();  
 	    	}
 	    }
@@ -93,7 +127,6 @@ private final int MINUTE = 4;
 			e.printStackTrace();
 	    	}
 	    }
-		ArrayList<Task> readTasks = new ArrayList<Task>();
 		return readTasks;
 	}
 }
